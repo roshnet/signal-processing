@@ -10,9 +10,25 @@ function magnitude(complex) {
   return complex
 }
 
-// Quantizes the given signal
-function quantize(signal, partitions, codebook) {
+// Quantize the given signal into specified levels
+function quantize(signal, levels) {
+  const min = Math.min(...signal)
+  const max = Math.max(...signal)
+  const interval = (max - min) / levels
+  
   let quantizedSignal = []
+  let partitions = []
+  let codebook = []
+  for (let i = min; i < max; i += interval) {
+    partitions.push(i)
+  }
+
+  let _start = min - (interval / 2)
+  let _end = max + (interval / 2)
+  for (let i = _start; i < _end; i += interval) {
+    codebook.push(i)
+  }
+
   let idx = 0
   for (let sample of signal) {
     idx = 0

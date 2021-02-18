@@ -31,23 +31,7 @@ recordAudio(FILENAME, DURATION, FS)
     }
 
     // Prepare quantized signal samples
-    const min = Math.min(...inputSamples)
-    const max = Math.max(...inputSamples)
-    const interval = (max - min) / LEVELS
-
-    let partitions = []
-    for (let i = min; i < max; i += interval) {
-      partitions.push(i)
-    }
-
-    let codebook = []
-    let _start = min - (interval / 2)
-    let _end = max + (interval / 2)
-    for (let i = _start; i < _end; i += interval) {
-      codebook.push(i)
-    }
-
-    const quantizedSamples = quantize(inputSamples, partitions, codebook)
+    const quantizedSamples = quantize(inputSamples, LEVELS)
 
     // Plot input signal samples
     plotlib.plot([
