@@ -10,6 +10,20 @@ function magnitude(complex) {
   return complex
 }
 
+// Quantizes the given signal
+function quantize(signal, partitions, codebook) {
+  let quantizedSignal = []
+  let idx = 0
+  for (let sample of signal) {
+    idx = 0
+    while (idx < partitions.length && sample > partitions[idx]) {
+      idx += 1
+    }
+    quantizedSignal.push(codebook[idx])
+  }
+  return quantizedSignal
+}
+
 // Records audio for `duration` seconds, at sampled at `freq` kHz.
 // Saves audio to `filename`.wav.
 async function recordAudioToFile(filename, duration, freq) {
@@ -50,3 +64,4 @@ function readAudioFromFile(filename) {
 module.exports.magnitude = magnitude
 module.exports.readAudio = readAudioFromFile
 module.exports.recordAudio = recordAudioToFile
+module.exports.quantize = quantize

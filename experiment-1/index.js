@@ -1,4 +1,4 @@
-const { magnitude, recordAudio, readAudio } = require('../utils')
+const { magnitude, recordAudio, readAudio, quantize } = require('../utils')
 const plotlib = require('nodeplotlib')
 const fft = require('fft-js').fft
 
@@ -6,6 +6,7 @@ const FILENAME = 'samples/sample-' + Math.floor(Math.random() * 1000) + '.wav'
 const FS = 8000
 const DURATION = 3
 const N = Math.pow(2, 14) // number of samples to plot
+const LEVELS = 8 // quantization levels
 
 recordAudio(FILENAME, DURATION, FS)
   .then((samples) => {
@@ -29,7 +30,26 @@ recordAudio(FILENAME, DURATION, FS)
       fv.push((i * FS) / N)
     }
 
-    // Plot input samples
+    // Prepare quantized signal samples
+    const min = Math.min(...inputSamples)
+    const max = Math.max(...inputSamples)
+    const interval = (max - min) / LEVELS
+
+    let partitions = []
+    for (let i = min; i < max; i += interval) {
+      partitions.push(i)
+    }
+
+    let codebook = []
+    let _start = min - (interval / 2)
+    let _end = max + (interval / 2)
+    for (let i = _start; i < _end; i += interval) {
+      codebook.push(i)
+    }
+
+    const quantizedSamples = quantize(inputSamples, partitions, codebook)
+
+    // Plot input signal samples
     plotlib.plot([
       {
         x: [...Array(inputSamples.length).keys()],
@@ -47,6 +67,16 @@ recordAudio(FILENAME, DURATION, FS)
         type: 'line',
         name: 'Power Spectrum',
       },
+    ])
+
+    // Plot quantized signal samples
+    plotlib.plot([
+      {
+        x: fv,
+        y: quantizedSamples,
+        type: 'line',
+        name: 'Quantized Signal'
+      }
     ])
   })
   .catch((err) => {
