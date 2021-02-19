@@ -15,7 +15,7 @@ function quantize(signal, levels) {
   const min = Math.min(...signal)
   const max = Math.max(...signal)
   const interval = (max - min) / levels
-  
+
   let quantizedSignal = []
   let partitions = []
   let codebook = []
@@ -23,8 +23,8 @@ function quantize(signal, levels) {
     partitions.push(i)
   }
 
-  let _start = min - (interval / 2)
-  let _end = max + (interval / 2)
+  let _start = min - interval / 2
+  let _end = max + interval / 2
   for (let i = _start; i < _end; i += interval) {
     codebook.push(i)
   }

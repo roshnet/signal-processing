@@ -24,11 +24,7 @@ recordAudio(FILENAME, DURATION, FS)
     })
 
     // Prepare frequency vector
-    let fv = []
-
-    for (let i = 0; i < N; i++) {
-      fv.push((i * FS) / N)
-    }
+    let fv = [...Array(N)].map((_v, i) => (i * FS) / N)
 
     // Prepare quantized signal samples
     const quantizedSamples = quantize(inputSamples, LEVELS)
