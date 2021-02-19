@@ -87,7 +87,7 @@ function createWavefile(signal, freq, filename) {
 module.exports = {
   magnitude,
   readAudio: readAudioFromFile,
-  recordAudio: readAudioFromFile,
+  recordAudio: recordAudioToFile,
   quantize,
   createWavefile,
 }
