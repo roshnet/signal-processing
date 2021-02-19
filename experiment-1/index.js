@@ -1,12 +1,23 @@
-const { magnitude, recordAudio, readAudio, quantize } = require('../utils')
+const {
+  magnitude,
+  recordAudio,
+  readAudio,
+  quantize,
+  createWavefile,
+} = require('../utils')
 const plotlib = require('nodeplotlib')
 const fft = require('fft-js').fft
 
-const FILENAME = 'samples/sample-' + Math.floor(Math.random() * 1000) + '.wav'
+const sampleId = Math.floor(Math.random() * 1000)
+const FILENAME = `samples/sample-${sampleId}.wav`
 const FS = 8000
 const DURATION = 3
-const N = Math.pow(2, 14) // number of samples to plot
-const LEVELS = 8 // quantization levels
+
+// Number of samples to plot
+const N = Math.pow(2, 14)
+
+// Quantization levels
+const LEVELS = 8
 
 recordAudio(FILENAME, DURATION, FS)
   .then((samples) => {
@@ -55,9 +66,15 @@ recordAudio(FILENAME, DURATION, FS)
         x: fv,
         y: quantizedSamples,
         type: 'line',
-        name: 'Quantized Signal'
-      }
+        name: 'Quantized Signal',
+      },
     ])
+
+    createWavefile(
+      quantizedSamples,
+      FS,
+      `samples/sample-${sampleId}-quantized.wav`,
+    )
   })
   .catch((err) => {
     console.warn('Caught exception: ', err)

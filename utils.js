@@ -40,7 +40,7 @@ function quantize(signal, levels) {
   return quantizedSignal
 }
 
-// Records audio for `duration` seconds, at sampled at `freq` kHz.
+// Records audio for `duration` seconds, at sampled at `freq` Hz.
 // Saves audio to `filename`.wav.
 async function recordAudioToFile(filename, duration, freq) {
   const file = fs.createWriteStream(filename, { encoding: 'binary' })
@@ -77,7 +77,15 @@ function readAudioFromFile(filename) {
   return wav.getSamples()
 }
 
+// Creates a new wav file from given signal
+function createWavefile(signal, freq, filename) {
+  let wav = new wavefile.WaveFile()
+  wav.fromScratch(1, freq, '8', signal)
+  fs.writeFileSync(filename, wav.toBuffer())
+}
+
 module.exports.magnitude = magnitude
 module.exports.readAudio = readAudioFromFile
 module.exports.recordAudio = recordAudioToFile
 module.exports.quantize = quantize
+module.exports.createWavefile = createWavefile
