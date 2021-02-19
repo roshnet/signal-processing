@@ -84,8 +84,10 @@ function createWavefile(signal, freq, filename) {
   fs.writeFileSync(filename, wav.toBuffer())
 }
 
-module.exports.magnitude = magnitude
-module.exports.readAudio = readAudioFromFile
-module.exports.recordAudio = recordAudioToFile
-module.exports.quantize = quantize
-module.exports.createWavefile = createWavefile
+module.exports = {
+  magnitude,
+  readAudio: readAudioFromFile,
+  recordAudio: readAudioFromFile,
+  quantize,
+  createWavefile,
+}
