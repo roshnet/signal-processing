@@ -41,34 +41,55 @@ recordAudio(FILENAME, DURATION, FS)
     const quantizedSamples = quantize(inputSamples, LEVELS)
 
     // Plot input signal samples
-    plotlib.plot([
+    plotlib.plot(
+      [
+        {
+          x: [...Array(inputSamples.length).keys()],
+          y: inputSamples,
+          type: 'line',
+          name: 'Input Signal',
+        },
+      ],
       {
-        x: [...Array(inputSamples.length).keys()],
-        y: inputSamples,
-        type: 'line',
-        name: 'Input Signal',
+        title: 'Input Signal',
+        xaxis: { title: 'Time' },
+        yaxis: { title: 'Amplitude' },
       },
-    ])
+    )
 
     // Plot the power spectrum
-    plotlib.plot([
+    plotlib.plot(
+      [
+        {
+          x: fv,
+          y: signalPowerSamples,
+          type: 'line',
+          name: 'Power Spectrum',
+        },
+      ],
       {
-        x: fv,
-        y: signalPowerSamples,
-        type: 'line',
-        name: 'Power Spectrum',
+        title: 'Power Spectrum',
+        xaxis: { title: 'Frequency' },
+        yaxis: { title: 'Signal Power' },
       },
-    ])
+    )
 
     // Plot quantized signal samples
-    plotlib.plot([
+    plotlib.plot(
+      [
+        {
+          x: fv,
+          y: quantizedSamples,
+          type: 'line',
+          name: 'Quantized Signal',
+        },
+      ],
       {
-        x: fv,
-        y: quantizedSamples,
-        type: 'line',
-        name: 'Quantized Signal',
+        title: 'Quantised signal',
+        xaxis: { title: 'Time' },
+        yaxis: { title: 'Amplitude' },
       },
-    ])
+    )
 
     createWavefile(
       quantizedSamples,
