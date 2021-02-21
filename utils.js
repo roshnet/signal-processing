@@ -74,7 +74,7 @@ async function recordAudioToFile(filename, duration, freq) {
 function readAudioFromFile(filename) {
   let wav = new wavefile.WaveFile()
   wav.fromBuffer(fs.readFileSync(filename))
-  return wav.getSamples()
+  return [].slice.call(wav.getSamples())
 }
 
 // Creates a new wav file from given signal
