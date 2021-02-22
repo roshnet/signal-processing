@@ -19,13 +19,13 @@ function quantize(signal, levels) {
   let quantizedSignal = []
   let partitions = []
   let codebook = []
-  for (let i = min; i < max; i += interval) {
+  for (let i = min; i <= max; i += interval) {
     partitions.push(i)
   }
 
   let _start = min - interval / 2
   let _end = max + interval / 2
-  for (let i = _start; i < _end; i += interval) {
+  for (let i = _start; i <= _end; i += interval) {
     codebook.push(i)
   }
 
