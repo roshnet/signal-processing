@@ -31,7 +31,7 @@ activeIndexes.forEach((value, idx) => {
 })
 
 // Extract array of 20 bits to plot
-let binaries = activeIndexes.join('').slice(0, 20).split('')
+let binaries = activeIndexes.join('').slice(0, 32).split('')
 
 // Convert all 0s to -1s
 const bitSequence = binaries.map((value) => {
@@ -47,14 +47,22 @@ const squareWave = squarify(
 
 // Prepare frequency vectors
 let freq = []
-for (var i = 0; i < 20; i++) {
-  freq.push(i * ((Math.log2(LEVELS) * FS) / N) - (Math.log2(LEVELS) * FS) / 2)
+for (var i = 0; i < 32; i++) {
+  freq.push(i * ((Math.log2(LEVELS) * FS) / 32) - (Math.log2(LEVELS) * FS) / 2)
 }
 
-let powerSamples = magnitude(fft(bitSequence.slice(0, 16)))
-powerSamples.forEach((value, idx) => {
-  powerSamples[idx] = Math.pow(value, 2) / 20
+let powerSamples = magnitude(fft(bitSequence.slice(0, 32)))
+
+let powerSamplesSquare = [...Array(32)].map((v, i) => {
+  return Math.pow(powerSamples[i], 2)
 })
+
+powerSamplesSquare.forEach((value, idx) => {
+  powerSamplesSquare[idx] = value / Math.max(...powerSamplesSquare)
+})
+
+const powerSamplesSquareSlice = powerSamplesSquare.slice(8, 16)
+const freqSlice = freq.slice(8, 16)
 
 // Plot the polar NRZ signaling
 plotlib.plot(
@@ -74,7 +82,7 @@ plotlib.plot(
   [
     {
       x: freq,
-      y: powerSamples,
+      y: powerSamplesSquare,
     },
   ],
   {
