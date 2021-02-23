@@ -17,6 +17,7 @@ function quantize(signal, levels) {
   const interval = (max - min) / levels
 
   let quantizedSignal = []
+  let indexes = []
   let partitions = []
   let codebook = []
   for (let i = min; i <= max; i += interval) {
@@ -36,8 +37,12 @@ function quantize(signal, levels) {
       idx += 1
     }
     quantizedSignal.push(codebook[idx])
+    indexes.push(idx)
   }
-  return quantizedSignal
+  return {
+    quantizedSignal,
+    indexes,
+  }
 }
 
 // Records audio for `duration` seconds, at sampled at `freq` Hz.

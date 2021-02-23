@@ -7,7 +7,8 @@ const N = Math.pow(2, 14)
 
 const originalSamples = readAudio(FILENAME).slice(0, N)
 
-const quantizedSamples = quantize(originalSamples, LEVELS)
+const _ = quantize(originalSamples, LEVELS)
+const quantizedSamples = _.quantizedSignal
 
 if (quantizedSamples.length !== N) {
   console.error('Incorrect number of samples in signals. Exiting.')

@@ -38,7 +38,7 @@ recordAudio(FILENAME, DURATION, FS)
     let fv = [...Array(N)].map((_v, i) => (i * FS) / N)
 
     // Prepare quantized signal samples
-    const quantizedSamples = quantize(inputSamples, LEVELS)
+    const { quantizedSamples, indexes } = quantize(inputSamples, LEVELS)
 
     // Plot input signal samples
     plotlib.plot(
