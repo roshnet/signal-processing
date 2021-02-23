@@ -82,6 +82,29 @@ function readAudioFromFile(filename) {
   return [].slice.call(wav.getSamples())
 }
 
+// Prepare values for a square plot for an otherwise linear plot
+function squarify(X, Y) {
+  let peaksIndex = []
+
+  // Check for discontinuities (peaks) in y-values
+  Y.map((value, idx) => {
+    if (Y[idx + 1] && Y[idx + 1] !== Y[idx]) {
+      peaksIndex.push(idx)
+    }
+  })
+
+  // Extend to another data point for perpendicular plot
+  for (let p of peaksIndex) {
+    Y.splice(p + 1, 0, Y[p])
+    X.splice(p + 1, 0, X[p + 1])
+    peaksIndex.forEach((value, i) => {
+      // Since indexes have shifted, update the peak indexes too
+      peaksIndex[i] += 1
+    })
+  }
+  return { X, Y }
+}
+
 // Creates a new wav file from given signal
 function createWavefile(signal, freq, filename) {
   let wav = new wavefile.WaveFile()
@@ -95,4 +118,5 @@ module.exports = {
   recordAudio: recordAudioToFile,
   quantize,
   createWavefile,
+  squarify,
 }
