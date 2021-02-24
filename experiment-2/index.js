@@ -30,7 +30,7 @@ activeIndexes.forEach((value, idx) => {
   activeIndexes[idx] = '0'.repeat(diff) + value
 })
 
-// Extract array of 20 bits to plot
+// Extract array of 32 bits to plot
 let binaries = activeIndexes.join('').slice(0, 32).split('')
 
 // Convert all 0s to -1s
@@ -74,6 +74,7 @@ plotlib.plot(
   ],
   {
     title: 'Polar NRZ Signaling',
+    xaxis: { title: 'Bits' },
   }
 )
 
@@ -87,5 +88,7 @@ plotlib.plot(
   ],
   {
     title: 'Power Spectrum',
+    xaxis: { title: 'Frequency' },
+    xaxis: { title: 'Power' },
   }
 )
