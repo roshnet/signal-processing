@@ -1,7 +1,7 @@
 const plotlib = require('nodeplotlib')
 const { createWavefile, readAudio, quantize } = require('../utils')
 
-const FILENAME = 'samples/sample-1.wav'
+const FILENAME = 'samples/main.wav'
 const LEVELS = 16
 const N = Math.pow(2, 14)
 

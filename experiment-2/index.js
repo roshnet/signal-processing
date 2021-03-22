@@ -2,7 +2,7 @@ const { magnitude, readAudio, quantize, squarify } = require('../utils')
 const plotlib = require('nodeplotlib')
 const fft = require('fft-js').fft
 
-const FILENAME = 'samples/sample-1.wav'
+const FILENAME = 'samples/main.wav'
 const FS = 8000 // Sampling frequency
 const LEVELS = 64 // Quantization levels
 const N = Math.pow(2, 14)
