@@ -112,6 +112,18 @@ function createWavefile(signal, freq, filename) {
   fs.writeFileSync(filename, wav.toBuffer())
 }
 
+function splitSequence(seq, len) {
+  const size = Math.ceil(seq.length / len)
+  const r = Array(size)
+  let skip = 0
+
+  for (let i = 0; i < size; i++) {
+    r[i] = seq.substr(skip, len)
+    skip += len
+  }
+  return r
+}
+
 module.exports = {
   magnitude,
   readAudio: readAudioFromFile,
@@ -119,4 +131,5 @@ module.exports = {
   quantize,
   createWavefile,
   squarify,
+  splitSequence
 }
