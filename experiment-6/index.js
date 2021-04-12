@@ -35,14 +35,6 @@ for (let i = 0; i < K; i++) {
 G = matrix(G).merge.right(p)
 G = matrix(G)
 
-// Define data word to use
-// const dataWord = matrix([[1, 0, 1, 1]])
-// let codeWord = dataWord.prod(G)
-
-// codeWord[0].forEach((v, i) => {
-//   codeWord[0][i] = v % 2
-// })
-
 const receivedCodeWord = matrix([[1, 0, 1, 1, 0, 0, 1]])
 
 const syndrome = receivedCodeWord.prod(matrix(matrix(h).trans()))
@@ -56,6 +48,26 @@ for (let i = 0; i < syndrome[0].length; i++) {
   sum += syndrome[0][i]
 }
 
+let dw = []
+for (i = 0; i < K; i++) {
+  let binary = i.toString(2)
+  let diff = K - binary.length
+  let paddedBinary = '0'.repeat(diff) + binary
+  paddedBinary = paddedBinary.split('')
+  paddedBinary.forEach((v, idx) => {
+    paddedBinary[idx] = Number(paddedBinary[idx])
+  })
+  dw.push(paddedBinary)
+}
+
+let DW = matrix(dw)
+let cw = DW.prod(G) // has valid codewords
+cw.forEach((_v, i) => {
+  cw[i].forEach((v, idx) => {
+    cw[i][idx] = v % 2
+  })
+})
+
 if (!sum) {
   console.log('Valid codeword!')
   // TODO
@@ -66,38 +78,20 @@ if (!sum) {
   // 4. Print the dw at that index.
 } else {
   console.log('Codeword was invalid. Attempting codeword correction.')
-  codeWordCorrection(K, receivedCodeWord())
+  codeWordCorrection(receivedCodeWord())
 }
 
+// RESULT: Log all values to the console
+// console.log(cw)
+
 // Generates the correct codeword from `receivedCodeWord`
-function codeWordCorrection(K, receivedCodeWord) {
-  let dw = []
-  for (i = 0; i < K; i++) {
-    let binary = i.toString(2)
-    let diff = K - binary.length
-    let paddedBinary = '0'.repeat(diff) + binary
-    paddedBinary = paddedBinary.split('')
-    paddedBinary.forEach((v, idx) => {
-      paddedBinary[idx] = Number(paddedBinary[idx])
-    })
-    dw.push(paddedBinary)
-  }
-
-  let DW = matrix(dw)
-  let cw = DW.prod(G) // has valid codewords
-
-  cw.forEach((_v, i) => {
-    cw[i].forEach((v, idx) => {
-      cw[i][idx] = v % 2
-    })
-  })
-
+function codeWordCorrection(receivedCodeWord) {
   let distances = []
 
   cw.forEach((v, i) => {
     let b = receivedCodeWord[0]
 
-    // Calculate Hamming distance
+    // Calculate & store Hamming distance in `distances[]`
     let distance =
       (parseInt(v.join(''), 2) ^ parseInt(b.join(''), 2)).toString(2).split('1')
         .length - 1
